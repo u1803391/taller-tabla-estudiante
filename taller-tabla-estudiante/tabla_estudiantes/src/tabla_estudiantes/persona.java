@@ -5,46 +5,33 @@
  */
 package tabla_estudiantes;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author crist
  */
 public class persona {
     
-    String nombre;
-    String apellido;
-    String nota;
+    public String nombre;
+    public String Estado;
+    
+    ArrayList<Double> notas;
 
-    public persona(String nombre, String apellido, String nota) {
+    public persona(String nombre, String Estado) {
         this.nombre = nombre;
-        this.apellido = apellido;
-        this.nota = nota;
+        this.Estado = Estado;
+        this.notas = new ArrayList<Double>();
     }
 
-    public String getNombre() {
-        return nombre;
+    public persona() {
     }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    
+ @Override
+    public String toString() {
+        return nombre  + ","+ Estado +"," + notas;
     }
-
-    public String getApellido() {
-        return apellido;
-    }
-
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
-    }
-
-    public String getNota() {
-        return nota;
-    }
-
-    public void setNota(String nota) {
-        this.nota = nota;
-    }
-
+   
    
     
     
