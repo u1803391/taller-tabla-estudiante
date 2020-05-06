@@ -5,8 +5,19 @@
  */
 package tabla_estudiantes;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -15,9 +26,14 @@ import org.jfree.chart.plot.PlotOrientation;
 
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.xy.DefaultIntervalXYDataset;
 import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-
+import  java.util.List ;
+import  java.util.Scanner ;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author crist
@@ -33,8 +49,8 @@ public class vista extends javax.swing.JFrame {
     int cols;
     double suma = 0;
     double promedio = 0;
-    int contAprovados=0;
-    int contReprovados=0;
+    int contAprobados=0;
+    int contReprobados=0;
 
     DefaultTableModel tabla_ingreso;
     DefaultTableModel tabla;
@@ -67,7 +83,6 @@ public class vista extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
@@ -78,8 +93,10 @@ public class vista extends javax.swing.JFrame {
         jTextField_numNotas = new javax.swing.JTextField();
         jTextField_nombre = new javax.swing.JTextField();
         btn_mortalidad = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        btn_exportar = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
+        jTextField_direccion = new javax.swing.JTextField();
+        btn_importar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -96,8 +113,6 @@ public class vista extends javax.swing.JFrame {
         jLabel5.setText("Cantidad estudiantes");
 
         jLabel6.setText("Cantidad de notas por estudiantes");
-
-        jLabel7.setText("jLabel7");
 
         jLabel8.setText("Nombre estudiante: ");
 
@@ -145,30 +160,40 @@ public class vista extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("jButton1");
+        btn_exportar.setText("EXPORTAR A ARCHIVO");
+        btn_exportar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_exportarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 424, Short.MAX_VALUE)
+            .addGap(0, 622, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 346, Short.MAX_VALUE)
         );
+
+        btn_importar.setText("SELECCIONAR ARCHIVO");
+        btn_importar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_importarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(188, 188, 188)
-                        .addComponent(jButton1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(51, 51, 51)
+                        .addGap(25, 25, 25)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel6)
                             .addComponent(jLabel5))
@@ -176,65 +201,75 @@ public class vista extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jTextField_numEstudiantes)
                             .addComponent(jTextField_numNotas, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 456, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel8)
-                                    .addComponent(btn_crear))
-                                .addGap(27, 27, 27)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btn_calcular)
-                                    .addComponent(jTextField_nombre, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(18, 18, 18)
-                                        .addComponent(btn_historico))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addGap(18, 18, 18)
-                                        .addComponent(btn_mortalidad, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 448, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 456, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel8)
+                                .addComponent(btn_crear))
+                            .addGap(27, 27, 27)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(btn_calcular)
+                                .addComponent(jTextField_nombre, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(18, 18, 18)
+                                    .addComponent(btn_historico))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                    .addGap(18, 18, 18)
+                                    .addComponent(btn_mortalidad, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 448, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel7)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(32, 32, 32))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(25, 25, 25))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btn_importar)
+                        .addGap(26, 26, 26)
+                        .addComponent(jTextField_direccion, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(87, 87, 87))))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(155, 155, 155)
+                .addComponent(btn_exportar)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(4, 4, 4)
-                .addComponent(jLabel7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGap(30, 30, 30)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(70, 70, 70)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btn_importar)
+                            .addComponent(jTextField_direccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
-                            .addComponent(jTextField_numEstudiantes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(jTextField_numNotas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(29, 29, 29)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btn_crear)
-                    .addComponent(btn_calcular)
-                    .addComponent(btn_mortalidad))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(jTextField_nombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_historico))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField_numEstudiantes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(jTextField_numNotas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(29, 29, 29)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btn_crear)
+                            .addComponent(btn_calcular)
+                            .addComponent(btn_mortalidad))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel8)
+                            .addComponent(jTextField_nombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btn_historico))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addComponent(btn_exportar)
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
         pack();
@@ -267,16 +302,17 @@ public class vista extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_mortalidadActionPerformed
 
     private void btn_calcularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_calcularActionPerformed
-    
+//obj.ingreso(Integer.parseInt(jTextField_numEstudiantes.getText()), Integer.parseInt(jTextField_numNotas.getText()) + 1);
        ingreso();
        calcular();
        mostrarTabla();
     }//GEN-LAST:event_btn_calcularActionPerformed
 
     private void btn_historicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_historicoActionPerformed
-       
+       boolean esta=false;
         int indice =0;
         for (int i = 0; i < listaPersonas.size(); i++) {
+             
              String nom=listaPersonas.get(i).nombre;
              String no=jTextField_nombre.getText();
              System.out.println("nombre de la lista es "+nom);
@@ -284,49 +320,209 @@ public class vista extends javax.swing.JFrame {
             if (nom.equals(no)) {
                 indice=i;
                 System.out.println("nombre"+listaPersonas.get(i).nombre);
-               
+                 esta=true;
             }
             else   
             {  
-                indice=-1;
+                //indice=-1;
                 System.out.println("error indice"+indice);
             }
            
         }
            
-        if (indice>=0) {
-            System.out.println("se encuentra en "+indice+"eeee"+listaPersonas.get(indice));
+        if (esta) {
+        
+         
            DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-           
-           XYSeriesCollection data = new XYSeriesCollection ();
-            for (int i = 0; i < cols-1; i++) {
-                Comparable s = null;
-                dataset.addValue(listaPersonas.get(indice).notas.get(i), "ddd", s);
-              //  data.addSeries(listaPersonas.get(indice).notas.get(i));
+           for (int i = 0; i < cols-1; i++) {
+               dataset.addValue(listaPersonas.get(indice).notas.get(i), "Nota", "Nota "+(i+1));
             }
-             JFreeChart chart = ChartFactory.createXYLineChart(
-                "XY Chart", // Título
-                "x-axis", // Etiqueta del eje X
-                "y-axis", // Etiqueta del eje Y
-                data, // Dataset
-                PlotOrientation.VERTICAL, // Orientación del gráfico
-                true, // Mostrar leyenda
-                true, // Usar tooltips
-                false // Configurar el gráfico para generar URLs
-        );
-                     
-          //  JFreeChart chart = ChartFactory.createXYStepAreaChart(jTextField_nombre.getText(), "notas", "sss", (XYDataset) dataset, PlotOrientation.HORIZONTAL, true, true, true);
-          //  jPanel2.removeAll();
-            //jPanel2.add(chart);
+            
+         
+          JFreeChart chart = ChartFactory.createLineChart(
+    "Historial notas "+jTextField_nombre.getText(), // Titulo
+    "", // Etiqueta de datos
+    "", // Etiqueta de valores
+    dataset, // Datos
+    PlotOrientation.VERTICAL, // orientacion
+    false, // Incluye leyenda
+    false, // Incluye tooltips
+    false // urls
+    );
+        ChartPanel opanel = new ChartPanel(chart);
+        jPanel1.removeAll();
+        jPanel1.setLayout(new java.awt.BorderLayout());
+        jPanel1.add(opanel);
+        jPanel1.validate();
+        
+        
         } 
         else{
-            //vehiculoenparqueadero=false;
-            //indice=-1;
+           JOptionPane.showMessageDialog(null, "Estudiante No Encontrado");
             System.out.println("errrro");
         }
         
     }//GEN-LAST:event_btn_historicoActionPerformed
+String file;
+File archivo;
+    private void btn_importarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_importarActionPerformed
+      JFileChooser seleccionar = new JFileChooser();
+      
+      
+      
+      seleccionar.setFileFilter(new FileNameExtensionFilter("Excel(*.csv)","(csv)"));
+      
+        if ( seleccionar.showDialog(null, "seleccione archivo")==JFileChooser.APPROVE_OPTION) {
+            archivo=seleccionar.getSelectedFile();
+             file=seleccionar.getSelectedFile().toString();
+            jTextField_direccion.setText(seleccionar.getSelectedFile().toString());
+            
+             try {
+            File myObj = new File(file); 
+            
+            System.out.println("Nombre del archivo: "+myObj.getName());
+            System.out.println("Ruta del archivo: "+myObj.getAbsolutePath());
+            System.out.println("Se puede escribir? "+myObj.canWrite());
+            System.out.println("Tamaño: "+myObj.length()+" bytes");
+            
+            Scanner myReader = new Scanner(myObj); 
+            while(myReader.hasNextLine()){
+                String data = myReader.nextLine();
+                List<String> record=getRecordFromLine(data);
+               
+                 persona dato=new persona();
+                 
+                 dato.nombre=record.get(0);
+                 dato.Estado=record.get(5);
+                 dato.notas.add(0, Double.parseDouble(record.get(1)));
+                listaPersonas.add(dato);
+                dato.no=Double.parseDouble(record.get(1));
+                 double num=0;
+                
+              //   dato.notas.add(Double.parseDouble(record.get(2)));
+                 
+                 num=dato.no;
+                 
+                 //listaPersonas.get(0).notas.add( num);
+                 //dato.notas.add(Double.parseDouble(record.get(2)));
+                 //dato.notas.add(Double.parseDouble(record.get(3)));
+                 //dato.notas.add(Double.parseDouble(record.get(4)));
+                 ///listaPersonas.add(dato);
+                 System.out.println("nombre es "+ (dato.nombre=record.get(0)));
+                 System.out.println("NOMBRE ES "+ listaPersonas.get(0).nombre);
+                System.out.println(data);
+            }
+                    
+        } catch (FileNotFoundException e) {
+            System.out.println("El archivo no existe");
+            //e.printStackTrace();
 
+        }
+            
+            
+            
+            
+            
+         /*   
+            File ar = new File (file);
+            
+          try {
+              crearListado();
+          } catch (FileNotFoundException ex) {
+              Logger.getLogger(vista.class.getName()).log(Level.SEVERE, null, ex);
+          }
+          */
+            
+        }
+            
+        for (int i = 0; i < listaPersonas.size(); i++) {
+                System.out.println("lista ingresada "+ listaPersonas.get(i));
+            }
+        
+        
+    }//GEN-LAST:event_btn_importarActionPerformed
+
+    private void btn_exportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_exportarActionPerformed
+        
+        
+       File myObj = new File("ArchivoDefinitivas.csv");
+       File myObj1 = new File("ArchivoNotas.csv");
+        try {
+            FileWriter writer = new FileWriter("ArchivoDefinitivas.csv", true);
+            
+            for (int i = 0; i < listaPersonas.size(); i++) {
+               // for (int j = 1; j < cols; j++) {
+                   String   nombre  =listaPersonas.get(i).nombre+";"+listaPersonas.get(i).notas.get(cols - 1)+";";
+                    writer.write(nombre);
+                   
+                    String   estado  =(listaPersonas.get(i).Estado+"\n");
+                    
+                   writer.append(estado);
+               /* for (int k = 0; k < listaPersonas.size(); k++) {
+                   String   ssstr  =(listaPersonas.get(k).Estado);
+                    
+                   writer.append(ssstr);
+                   
+                } */
+            }
+            writer.close();
+            FileWriter writer1 = new FileWriter("ArchivoNotas.csv", true);
+            
+            for (int i = 0; i < listaPersonas.size(); i++) {
+               
+                   String   nombre  =listaPersonas.get(i).nombre+";";
+                    writer1.write(nombre);
+                
+                   for (int j = 0; j < cols; j++) {
+                   String   notas  =(listaPersonas.get(i).notas.get(j))+";";
+                    
+                   writer1.append(notas);
+                   
+                }
+                 writer1.append("\n");
+               /* for (int k = 0; k < listaPersonas.size(); k++) {
+                   String   ssstr  =(listaPersonas.get(k).Estado);
+                    
+                   writer.append(ssstr);
+                   
+                } */
+            }
+            writer1.close();
+            JOptionPane.showMessageDialog(null, "Notas exportadas en: "+myObj1.getName()+"\n"+"Definitivas exportadas en"+myObj.getName());
+        } catch (IOException ex) {
+            Logger.getLogger(vista.class.getName()).log(Level.SEVERE, null, ex);
+        }
+      
+                                      
+    }//GEN-LAST:event_btn_exportarActionPerformed
+ public List<persona> crearListado() throws FileNotFoundException{
+         List<persona> listadoFinal = new ArrayList<>();
+        try (Scanner scanner = new Scanner(this.archivo)) {
+            while (scanner.hasNextLine()) {
+                List<String> record=getRecordFromLine(scanner.nextLine());
+                persona dato=new persona();
+                dato.nombre=record.get(0);
+                dato.Estado=record.get(5);
+               // dato.notas.add(Double.parseDouble(record.get(1)));
+               // dato.notas.add(Double.parseDouble(record.get(2)));
+               // dato.notas.add(Double.parseDouble(record.get(3)));
+                //dato.notas.add(Double.parseDouble(record.get(4)));
+                listadoFinal.add(dato);
+            }
+        }
+        return listadoFinal;
+    }
+    
+      private List<String> getRecordFromLine(String line) {
+        List<String> values = new ArrayList<String>();
+        try (Scanner rowScanner = new Scanner(line)) {
+            rowScanner.useDelimiter(";");
+            while (rowScanner.hasNext()) {
+                values.add(rowScanner.next());
+            }
+        }
+        return values;
+    }
     public void ingreso(){
         for (int i = 0; i < rows; i++) {
 
@@ -350,9 +546,9 @@ public class vista extends javax.swing.JFrame {
     public void calcular(){
         for (int i = 0; i < listaPersonas.size(); i++) {
             if (listaPersonas.get(i).notas.get(cols - 1) >= 3.0) {
-                contAprovados++;
+                contAprobados++;
                 
-                persona nuevaPersona = new persona((String) tabla_ingreso.getValueAt(i, 0), "APROVADO");
+                persona nuevaPersona = new persona((String) tabla_ingreso.getValueAt(i, 0), "APROBADO");
                 listaPersonas.set(i, nuevaPersona);
                 System.out.println("hola");
 
@@ -372,8 +568,8 @@ public class vista extends javax.swing.JFrame {
             } else {
                 //listaPersonas.set(i, obj1).Estado="REPROVADO";
                 
-                contReprovados++;
-                persona nuevaPersona = new persona((String) tabla_ingreso.getValueAt(i, 0), "REPROVADO");
+                contReprobados++;
+                persona nuevaPersona = new persona((String) tabla_ingreso.getValueAt(i, 0), "REPROBADO");
                 listaPersonas.set(i, nuevaPersona);
                 System.out.println("hola");
 
@@ -409,8 +605,8 @@ public class vista extends javax.swing.JFrame {
     public void mortalida()
     {
         DefaultPieDataset pieDataset = new DefaultPieDataset();
-        pieDataset.setValue("APROVADOS", contAprovados);
-        pieDataset.setValue("REPROVADOS", contReprovados);
+        pieDataset.setValue("APROBADOS", (((contAprobados)*100)/(contReprobados+contAprobados)));
+        pieDataset.setValue("REPROBADOS", (((contReprobados)*100)/(contAprobados+contReprobados)));
         
         JFreeChart chart = ChartFactory.createPieChart("MORTALIDAD CURSO", // Title
                 pieDataset, // Dataset
@@ -420,14 +616,20 @@ public class vista extends javax.swing.JFrame {
         );
        //Creación del panel con el gráfico
         ChartPanel chartPanel = new ChartPanel(chart);
-        chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
+        chartPanel.setPreferredSize(new java.awt.Dimension(800, 600));
         
         //Creación de la ventana con el panel
-        JFrame Ventana = new JFrame("Gráfico");
+        JFrame Ventana = new JFrame("Gráfico Mortalidad");
         Ventana.getContentPane().add(chartPanel);
         Ventana.pack();
         Ventana.setVisible(true);
-        Ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Ventana.setLocationRelativeTo(null);
+        //Ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+    }
+    
+    public void importar()
+    {
         
     }
     
@@ -469,18 +671,19 @@ public class vista extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_calcular;
     private javax.swing.JButton btn_crear;
+    private javax.swing.JButton btn_exportar;
     private javax.swing.JButton btn_historico;
+    private javax.swing.JButton btn_importar;
     private javax.swing.JButton btn_mortalidad;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable jTable1;
+    public javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
+    private javax.swing.JTextField jTextField_direccion;
     private javax.swing.JTextField jTextField_nombre;
     private javax.swing.JTextField jTextField_numEstudiantes;
     private javax.swing.JTextField jTextField_numNotas;

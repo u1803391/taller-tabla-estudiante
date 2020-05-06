@@ -15,7 +15,7 @@ public class persona {
     
     public String nombre;
     public String Estado;
-    
+    public double no;
     ArrayList<Double> notas;
 
     public persona(String nombre, String Estado) {
@@ -23,6 +23,12 @@ public class persona {
         this.Estado = Estado;
         this.notas = new ArrayList<Double>();
     }
+    /*
+public persona(String nombre, String Estado, double nota) {
+        this.nombre = nombre;
+        this.Estado = Estado;
+        this.no =nota;
+    }*/
 
     public persona() {
     }

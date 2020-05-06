@@ -19,6 +19,8 @@ public class Tabla_estudiantes {
         
         vista vista=new vista();
         vista.setVisible(true);
+        vista.setTitle("NOTAS ESTUDIANTES");
+        vista.setLocationRelativeTo(null);
     }
     
 }

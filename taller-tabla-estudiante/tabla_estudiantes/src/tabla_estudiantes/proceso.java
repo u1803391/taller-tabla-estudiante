@@ -15,12 +15,12 @@ public class proceso {
     ArrayList<persona> listaPersonas = new ArrayList<persona>();
     double promedio=0;
     double suma=0;
-   // vista ddd = new vista();
+    //vista ddd = new vista();
     
     public void ingreso(int numEstudiantes, int numNotas) {
-  /*
+/*
         for (int i = 0; i < numEstudiantes; i++) {
-            persona nuevoEstudiante = new persona((String) ddd.m.getValueAt( i,0),"");
+            persona nuevoEstudiante = new persona((String) ddd.tabla.getValueAt( i,0),"");
             listaPersonas.add(nuevoEstudiante);
             System.out.println("ingrese nota");
              suma=0;
@@ -28,23 +28,26 @@ public class proceso {
               for (int j = 1; j < numNotas; j++) {
                   
               
-                 listaPersonas.get(i).notas.add(Double.parseDouble(ddd.m.getValueAt( i, j).toString()));
+                 listaPersonas.get(i).notas.add(Double.parseDouble(ddd.tabla.getValueAt( i, j).toString()));
                 
-              suma+=Double.parseDouble(ddd.m.getValueAt( i, j).toString());
+              suma+=Double.parseDouble(ddd.tabla.getValueAt( i, j).toString());
               promedio=suma/(numNotas-1);
-                 // System.out.println("lista "+ listaPersonas.get(j));
+                  System.out.println("lista "+ listaPersonas.get(j));
 //               suma = suma + listaPersonas.get(i).notas.get(j);
               }
   listaPersonas.get(i).notas.add(promedio);
           //  listaPersonas.get(i).notas.add(suma);
 
         }
-*/
+
         
         for (int i = 0; i < listaPersonas.size(); i++) {
             System.out.println(listaPersonas.get(i));
            
             
-        }
+        }*/
+
+
+
     }
 }
